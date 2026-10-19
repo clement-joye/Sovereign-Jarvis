@@ -1,0 +1,33 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/contracts" },
+    { "path": "packages/domain" },
+    { "path": "packages/application" },
+    { "path": "packages/configuration" },
+    { "path": "packages/observability" },
+    { "path": "packages/platform-catalog" },
+    { "path": "packages/plugin-sdk" },
+    { "path": "packages/installed-plugins" },
+    { "path": "packages/memory-adapter" },
+    { "path": "packages/testkit" },
+    { "path": "packages/matrix-adapter" },
+    { "path": "packages/pi-adapter" },
+    { "path": "packages/postgres-adapter" },
+    { "path": "packages/schedule-engine" },
+    { "path": "packages/media-adapter" },
+    { "path": "plugins/core-agents" },
+    { "path": "plugins/browser" },
+    { "path": "plugins/example-echo" },
+    { "path": "apps/matrix-gateway" },
+    { "path": "apps/brain-control" },
+    { "path": "apps/brain-worker" },
+    { "path": "apps/pi-runner" },
+    { "path": "apps/inference-gateway" },
+    { "path": "apps/runtime-provisioner" },
+    { "path": "apps/media-worker" },
+    { "path": "apps/scheduler" },
+    { "path": "apps/retention-worker" },
+    { "path": "apps/brain-cli" }
+  ]
+}

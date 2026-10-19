@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": ".",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
+  },
+  "references": [
+    { "path": "../../packages/application" },
+    { "path": "../../packages/configuration" },
+    { "path": "../../packages/observability" },
+    { "path": "../../packages/platform-catalog" },
+    { "path": "../../packages/pi-adapter" }
+  ],
+  "include": ["src/**/*.ts"]
+}

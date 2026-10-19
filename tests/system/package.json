@@ -1,0 +1,22 @@
+{
+  "name": "@second-brain/system-tests",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "Clément Joye",
+  "type": "module",
+  "scripts": {
+    "test:compose": "vitest run --config vitest.config.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@second-brain/contracts": "workspace:*",
+    "@second-brain/matrix-adapter": "workspace:*",
+    "@second-brain/platform-catalog": "workspace:*",
+    "@second-brain/testkit": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

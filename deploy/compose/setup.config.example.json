@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "matrix": {
+    "serverName": "<permanent-private-server-name>"
+  },
+  "inference": {
+    "baseUrl": "http://127.0.0.1:8080/v1",
+    "providerId": "<reviewed-provider-id>",
+    "modelId": "<model-id>",
+    "apiKey": "<inference-api-key>",
+    "credentialFree": false
+  },
+  "deployment": {
+    "postgresImage": "docker.io/library/postgres:16.15-alpine3.24@sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea",
+    "whisperModelSha256": "1be3a9b2063867b937e64e2ec7483364a79917e157fa98c5d94b5c1fffea987b"
+  },
+  "exposure": { "privateNetworkConfirmed": false }
+}

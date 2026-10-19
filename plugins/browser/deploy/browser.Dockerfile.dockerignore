@@ -1,0 +1,17 @@
+# The Browser image owns only executable Browser resources. Everything else,
+# including its prompt and skills, is outside this image build graph.
+**
+!plugins/
+!plugins/browser/
+!plugins/browser/deploy/
+!plugins/browser/deploy/package.json
+!plugins/browser/deploy/package-lock.json
+!plugins/browser/deploy/requirements.lock
+!plugins/browser/deploy/playwright-archives.json
+!plugins/browser/deploy/install-verified-playwright.mjs
+!plugins/browser/resources/
+!plugins/browser/resources/extensions/
+!plugins/browser/resources/extensions/browser/**
+!plugins/browser/resources/browser/
+!plugins/browser/resources/browser/bin/
+!plugins/browser/resources/browser/bin/**

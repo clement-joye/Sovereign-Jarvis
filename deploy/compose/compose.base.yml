@@ -1,0 +1,84 @@
+# Shared topology; overlays supply environment-specific values.
+services:
+  brain-db:
+    image: docker.io/library/postgres:16.15-alpine3.24@sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+    environment:
+      TZ: Europe/Stockholm
+      POSTGRES_DB: brain
+      POSTGRES_USER: brain
+    volumes:
+      - brain-postgres-data:/var/lib/postgresql/data
+      - ../migrations:/docker-entrypoint-initdb.d:ro
+    networks:
+      - control_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U brain -d brain"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  matrix-homeserver:
+    image: forgejo.ellis.link/continuwuation/continuwuity@sha256:5cc03961412fb74836a14599cda3bfa17f003df902d9555281fa973976c5243b
+    command: /sbin/conduwuit
+    environment:
+      TZ: Europe/Stockholm
+      CONTINUWUITY_DATABASE_PATH: /var/lib/continuwuity
+      CONTINUWUITY_ADDRESS: 0.0.0.0
+      CONTINUWUITY_PORT: "8008"
+      CONTINUWUITY_ALLOW_FEDERATION: "false"
+    volumes:
+      - matrix-data:/var/lib/continuwuity
+    networks:
+      - matrix_net
+
+  matrix-homeserver-ready:
+    build:
+      context: ../..
+      dockerfile: deploy/images/node.Dockerfile
+      args:
+        APP_NAME: matrix-gateway
+    command: ["node", "/app/deploy/scripts/bootstrap/wait-for-matrix-homeserver.mjs"]
+    depends_on:
+      matrix-homeserver:
+        condition: service_started
+    networks:
+      - matrix_net
+    restart: "no"
+
+  piper-model-init:
+    build:
+      context: ../..
+      dockerfile: deploy/images/model-init.Dockerfile
+    environment:
+      PIPER_MODEL_SHA256: ${PIPER_MODEL_SHA256:-5d4f08ba6a2a48c44592eed3ce56bf85e9de3dd4e20df90541ae68a8310c029a}
+      PIPER_MODEL_CONFIG_SHA256: ${PIPER_MODEL_CONFIG_SHA256:-7e1f4634af596d83cca997fb7a931ba80b70f8a316a2655ee69c55365e0ace14}
+    command: ["sh", "/usr/local/bin/download-piper-model"]
+    volumes:
+      - piper-models:/opt/piper-models:rw
+
+  scheduler:
+    build:
+      context: ../..
+      dockerfile: deploy/images/node.Dockerfile
+      args:
+        APP_NAME: scheduler
+    environment:
+      BRAIN_CONTROL_URL: http://brain-control:3000
+      SCHEDULER_POLL_INTERVAL_MS: "30000"
+      SCHEDULER_CLAIM_LIMIT: "10"
+    networks:
+      - control_net
+
+  retention-worker:
+    build:
+      context: ../..
+      dockerfile: deploy/images/node.Dockerfile
+      args:
+        APP_NAME: retention-worker
+    environment:
+      BRAIN_CONTROL_URL: http://brain-control:3000
+      RETENTION_DRY_RUN: "true"
+      RETENTION_POLL_INTERVAL_MS: "3600000"
+      RETENTION_BATCH_LIMIT: "100"
+    networks:
+      - control_net

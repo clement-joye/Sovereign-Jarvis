@@ -1,0 +1,23 @@
+{
+  "name": "@second-brain/brain-cli",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "Clément Joye",
+  "type": "module",
+  "bin": {
+    "brainctl": "dist/src/index.js"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "start": "node dist/src/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@second-brain/configuration": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "catalog:"
+  }
+}

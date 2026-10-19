@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "paths": {
+      "@second-brain/application": ["./packages/application/src/index.ts"],
+      "@second-brain/configuration": ["./packages/configuration/src/index.ts"],
+      "@second-brain/contracts": ["./packages/contracts/src/index.ts"],
+      "@second-brain/domain": ["./packages/domain/src/index.ts"],
+      "@second-brain/matrix-adapter": ["./packages/matrix-adapter/src/index.ts"],
+      "@second-brain/media-adapter": ["./packages/media-adapter/src/index.ts"],
+      "@second-brain/observability": ["./packages/observability/src/index.ts"],
+      "@second-brain/platform-catalog": ["./packages/platform-catalog/src/index.ts"],
+      "@second-brain/pi-adapter": ["./packages/pi-adapter/src/index.ts"],
+      "@second-brain/postgres-adapter": ["./packages/postgres-adapter/src/index.ts"],
+      "@second-brain/schedule-engine": ["./packages/schedule-engine/src/index.ts"],
+      "@second-brain/testkit/fakes": ["./packages/testkit/src/fakes.ts"],
+      "@second-brain/testkit": ["./packages/testkit/src/index.ts"],
+      "@second-brain/memory-adapter": ["./packages/memory-adapter/src/index.ts"],
+      "@second-brain/brain-control": ["./apps/brain-control/src/index.ts"],
+      "@second-brain/brain-worker": ["./apps/brain-worker/src/index.ts"],
+      "@second-brain/matrix-gateway": ["./apps/matrix-gateway/src/index.ts"]
+    },
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "rootDir": ".",
+    "types": ["node"]
+  }
+}

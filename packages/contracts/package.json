@@ -1,0 +1,40 @@
+{
+  "name": "@second-brain/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "Clément Joye",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./schemas": {
+      "types": "./dist/src/schemas.d.ts",
+      "import": "./dist/src/schemas.js"
+    },
+    "./platform-catalog": {
+      "types": "./dist/src/platform-catalog.d.ts",
+      "import": "./dist/src/platform-catalog.js"
+    },
+    "./internal-api-routes": {
+      "types": "./dist/src/internal-api-routes.d.ts",
+      "import": "./dist/src/internal-api-routes.js"
+    },
+    "./examples": {
+      "types": "./dist/src/examples.d.ts",
+      "import": "./dist/src/examples.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "zod-to-json-schema": "catalog:"
+  }
+}

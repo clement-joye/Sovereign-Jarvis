@@ -1,0 +1,21 @@
+{
+  "name": "@second-brain/media-adapter",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "Clément Joye",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@second-brain/contracts": "workspace:*"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@second-brain/media-worker",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "Clément Joye",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b",
+    "start": "node dist/src/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@second-brain/configuration": "workspace:*",
+    "@second-brain/contracts": "workspace:*",
+    "@second-brain/media-adapter": "workspace:*",
+    "@second-brain/observability": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "catalog:"
+  }
+}

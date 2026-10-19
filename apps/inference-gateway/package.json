@@ -1,0 +1,13 @@
+{
+  "name": "@second-brain/inference-gateway",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "Clément Joye",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b",
+    "start": "node dist/src/index.js",
+    "test": "vitest run --root ../.. apps/inference-gateway/src/index.test.ts"
+  }
+}

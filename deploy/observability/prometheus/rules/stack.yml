@@ -1,0 +1,13 @@
+groups:
+  - name: jarvis-observability-stack
+    interval: 30s
+    rules:
+      - alert: JarvisObservabilityTargetDown
+        expr: up{job=~"(loki|alloy|grafana)"} == 0
+        for: 5m
+        labels:
+          severity: critical
+          component: observability
+        annotations:
+          summary: "Jarvis observability target is down"
+          description: "{{ $labels.job }} has been unavailable for at least five minutes."

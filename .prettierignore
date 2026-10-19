@@ -1,0 +1,21 @@
+node_modules/
+.pnpm-store/
+dist/
+coverage/
+docs/
+pnpm-lock.yaml
+**/*.d.ts
+**/*.d.ts.map
+**/*.js.map
+# Misplaced build artifacts next to source files in apps/* and packages/*.
+apps/**/*.d.ts
+apps/**/*.d.ts.map
+apps/**/*.js
+apps/**/*.js.map
+packages/**/*.d.ts
+packages/**/*.d.ts.map
+packages/**/*.js
+packages/**/*.js.map
+
+# Immutable plugin runtime payloads retain their own runtime toolchain/style.
+plugins/**/resources/

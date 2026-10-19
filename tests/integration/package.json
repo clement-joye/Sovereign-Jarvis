@@ -1,0 +1,34 @@
+{
+  "name": "@second-brain/integration-tests",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "Clément Joye",
+  "type": "module",
+  "scripts": {
+    "test:postgres": "vitest run --config vitest.config.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@second-brain/application": "workspace:*",
+    "@second-brain/configuration": "workspace:*",
+    "@second-brain/contracts": "workspace:*",
+    "@second-brain/matrix-adapter": "workspace:*",
+    "@second-brain/media-adapter": "workspace:*",
+    "@second-brain/observability": "workspace:*",
+    "@second-brain/postgres-adapter": "workspace:*",
+    "@second-brain/testkit": "workspace:*",
+    "@second-brain/brain-control": "workspace:*",
+    "@second-brain/brain-worker": "workspace:*",
+    "@second-brain/matrix-gateway": "workspace:*",
+    "@second-brain/pi-runner": "workspace:*",
+    "@testcontainers/postgresql": "catalog:",
+    "pg": "catalog:",
+    "testcontainers": "catalog:"
+  },
+  "devDependencies": {
+    "@types/pg": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

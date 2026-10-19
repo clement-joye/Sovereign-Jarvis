@@ -1,0 +1,60 @@
+// Collect only Jarvis' redacted security-event records from Docker's local
+// json-file logs. The log directory is mounted read-only by Compose; no
+// Docker socket or container control API is required by this collector.
+
+local.file_match "docker_logs" {
+	path_targets = [{
+		__path__ = "/var/lib/docker/containers/*/*-json.log",
+		job      = "jarvis-security",
+	}]
+	sync_period = "10s"
+}
+
+loki.source.file "docker_logs" {
+	targets       = local.file_match.docker_logs.targets
+	forward_to    = [loki.process.security_events.receiver]
+	tail_from_end = true
+}
+
+loki.process "security_events" {
+	// Docker's json-file driver wraps the application JSON in a `log` field.
+	stage.docker { }
+
+	// Keep the collector deliberately narrow. A non-matching line is dropped
+	// before any payload is sent to Loki.
+	stage.match {
+		selector            = "{job=\"jarvis-security\"} !~ \"security event\""
+		action              = "drop"
+		drop_counter_reason = "not_security_event"
+	}
+
+	stage.json {
+		expressions = {
+			event_type = "data.security_event.type",
+		}
+	}
+
+	// Event type is the sole application-derived label and has five values.
+	// Identifiers and deployment metadata remain in the log body only.
+	stage.labels {
+		values = {
+			security_event_type = "event_type",
+		}
+	}
+
+	// Drop marker-like or malformed lines after parsing. Only the reviewed,
+	// low-cardinality security vocabulary may leave the collector.
+	stage.match {
+		selector            = "{security_event_type!~\"authorization[.]denied|catalog[.]mismatch|approval[.]consumed|workspace_path[.]denied|plugin[.]failure\"}"
+		action              = "drop"
+		drop_counter_reason = "unknown_security_event_type"
+	}
+
+	forward_to = [loki.write.local.receiver]
+}
+
+loki.write "local" {
+	endpoint {
+		url = "http://loki:3100/loki/api/v1/push"
+	}
+}

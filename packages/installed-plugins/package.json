@@ -1,0 +1,29 @@
+{
+  "name": "@second-brain/installed-plugins",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "Clément Joye",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./catalog": {
+      "types": "./dist/src/catalog.d.ts",
+      "import": "./dist/src/catalog.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@second-brain/application": "workspace:*",
+    "@second-brain/browser-plugin": "workspace:*",
+    "@second-brain/core-agents-plugin": "workspace:*",
+    "@second-brain/example-echo-plugin": "workspace:*",
+    "@second-brain/plugin-sdk": "workspace:*"
+  }
+}

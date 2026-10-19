@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "pluginIds": ["git-remote"],
+  "agentIds": [
+    "architect",
+    "bootstraper",
+    "code",
+    "coordinator",
+    "dotnet",
+    "explorer",
+    "git",
+    "nextjs",
+    "planner",
+    "react",
+    "reviewer",
+    "worker"
+  ],
+  "capabilityIds": ["git-mutation", "git-observation"]
+}

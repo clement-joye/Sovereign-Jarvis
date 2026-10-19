@@ -1,0 +1,21 @@
+{
+  "providers": {
+    "omlx": {
+      "baseUrl": "http://inference-gateway:3050/v1",
+      "api": "openai-completions",
+      "apiKey": "local-inference-no-auth",
+      "compat": {
+        "supportsDeveloperRole": false,
+        "supportsReasoningEffort": false
+      },
+      "models": [
+        {
+          "id": "Qwen3.6-35B-A3B-OptiQ-4bit:profile-qwen-general",
+          "reasoning": true,
+          "input": ["text", "image"],
+          "contextWindow": 200000
+        }
+      ]
+    }
+  }
+}

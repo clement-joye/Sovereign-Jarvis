@@ -1,0 +1,6 @@
+{"vertex":"load:base","name":"load metadata for base","started":"2026-09-20T10:00:00.000Z","completed":"2026-09-20T10:00:00.120Z","cached":true}
+{"vertex":"load:base","status":"cached"}
+{"vertex":"step:install","name":"RUN pnpm install","started":"2026-09-20T10:00:00.200Z"}
+{"vertex":"step:install","status":"completed","completed":"2026-09-20T10:00:01.500Z"}
+{"vertex":"step:copy","name":"COPY source","started":"2026-09-20T10:00:01.550Z","completed":"2026-09-20T10:00:01.800Z"}
+{"vertex":"step:final","name":"exporting to image","started":"2026-09-20T10:00:01.900Z","completed":"2026-09-20T10:00:02.000Z","cached":true}

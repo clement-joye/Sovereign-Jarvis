@@ -1,0 +1,6 @@
+# Role prompts and skills are published as a separate digest-addressed bundle.
+# Excluding plugin resources keeps prompt and skill edits out of the base
+# executable image's BuildKit context. The core extension remains an image input.
+plugins/*/resources/*
+!plugins/core-agents/resources/extensions
+!plugins/core-agents/resources/extensions/**

@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "noEmit": true
+  },
+  "references": [
+    { "path": "../../packages/contracts" },
+    { "path": "../../packages/matrix-adapter" },
+    { "path": "../../packages/postgres-adapter" },
+    { "path": "../../packages/testkit" }
+  ],
+  "include": ["**/*.ts"]
+}

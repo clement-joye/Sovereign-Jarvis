@@ -1,0 +1,50 @@
+node_modules/
+.pnpm-store/
+dist/
+coverage/
+.turbo/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+deploy/compose/setup.config.json
+.DS_Store
+*.log
+tmp/
+backups/
+deploy/runtime/
+.jarvis/
+deploy/compose/state/
+deploy/compose/data/
+deploy/compose/backups/
+deploy/compose/models/
+deploy/compose/platform-catalog/
+deploy/compose/runtime-profile/
+deploy/compose/matrix-crypto/
+deploy/compose/media/
+deploy/compose/postgres/
+
+# TypeScript build artifacts emitted next to source files when tsc is run
+# without a proper outDir (see eslint.config.js rootDir/outDir).
+**/*.js
+**/*.js.map
+**/*.d.ts
+**/*.d.ts.map
+**/*.d.mts
+**/*.d.mts.map
+**/*.d.cts
+**/*.d.cts.map
+# Hand-authored module contracts used to typecheck script imports from tests.
+!eslint.config.js
+!scripts/migrations/*.d.mts
+!scripts/operator/*.d.mts
+!scripts/setup/test-artifact-fixtures.d.mts
+!scripts/runtime/*.d.mts
+!scripts/plugins/*.d.mts
+
+# Generated artefacts from `pnpm schema:generate`. The Zod schemas in
+# packages/contracts/src/schemas.ts are the source of truth; regenerate
+# via `pnpm schema:generate` whenever a schema changes.
+docs/generated/*
+!docs/generated/PLUGINS.md
+!docs/generated/production-dependency-licenses.json

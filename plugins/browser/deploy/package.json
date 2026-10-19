@@ -1,0 +1,10 @@
+{
+  "name": "@second-brain/browser-runtime-dependencies",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Pinned production dependencies for the Browser runtime image",
+  "dependencies": {
+    "@sinclair/typebox": "0.34.49",
+    "playwright": "1.59.1"
+  }
+}

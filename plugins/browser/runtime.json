@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "images": [
+    {
+      "id": "browser-runtime",
+      "kind": "runtime-class",
+      "runtimeClass": "browser",
+      "baseRuntime": true,
+      "dockerfile": "deploy/browser.Dockerfile",
+      "tag": "jarvis/pi-jarvis:browser"
+    }
+  ]
+}

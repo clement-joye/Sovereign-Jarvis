@@ -1,0 +1,85 @@
+name: CI
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  macos-source-smoke:
+    if: ${{ !github.event.repository.private }}
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.5.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install dependencies with frozen cross-platform lockfile
+        run: pnpm install --frozen-lockfile
+      - name: Load Matrix native crypto dependency
+        run: >-
+          pnpm --filter @second-brain/matrix-gateway exec node -e
+          'import("@matrix-org/matrix-sdk-crypto-nodejs").then(module => {
+          if (!module.StoreType) throw new Error("Matrix native crypto binding did not load");
+          })'
+      - name: Check formatting
+        run: pnpm format
+      - name: Run setup and operator tests, including launchd generation
+        run: pnpm test:scripts:operator
+
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan clean checkout for secrets
+        run: >-
+          docker run --rm
+          -v "${GITHUB_WORKSPACE}:/repo:ro"
+          ghcr.io/gitleaks/gitleaks:v8.30.0@sha256:691af3c7c5a48b16f187ce3446d5f194838f91238f27270ed36eef6359a574d9
+          dir --redact=100 --exit-code=1 /repo
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.5.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm docs:check-links
+      - run: pnpm compose:check
+      - run: node scripts/checks/check-ignored-artifacts.mjs
+      - run: pnpm test:scripts:checks
+      - run: pnpm test:scripts:operator
+      - run: pnpm arch:check
+      - run: pnpm schema:generate
+      - run: pnpm db:migrate:check
+      - run: pnpm test:contract
+      - run: pnpm test
+
+  integration:
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.5.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:integration:postgres
+      - run: pnpm test:system:compose

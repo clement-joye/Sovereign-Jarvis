@@ -1,0 +1,30 @@
+{
+  "name": "@second-brain/brain-control",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "Clément Joye",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b",
+    "start": "node dist/src/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@second-brain/application": "workspace:*",
+    "@second-brain/configuration": "workspace:*",
+    "@second-brain/contracts": "workspace:*",
+    "@second-brain/installed-plugins": "workspace:*",
+    "@second-brain/memory-adapter": "workspace:*",
+    "@second-brain/observability": "workspace:*",
+    "@second-brain/platform-catalog": "workspace:*",
+    "@second-brain/pi-adapter": "workspace:*",
+    "@second-brain/postgres-adapter": "workspace:*"
+  },
+  "devDependencies": {
+    "@second-brain/domain": "workspace:*",
+    "@second-brain/testkit": "workspace:*",
+    "tsx": "catalog:"
+  }
+}

@@ -1,0 +1,175 @@
+apiVersion: 1
+
+# Grafana evaluates these Loki-backed rules locally. They intentionally have
+# no external contact point by default; operators can add a reviewed contact
+# point and route this folder without exposing an alert receiver publicly.
+groups:
+  - orgId: 1
+    name: Jarvis security events
+    folder: Jarvis
+    interval: 1m
+    rules:
+      - uid: jarvis-authorization-denied
+        title: Jarvis authorization denied
+        condition: C
+        for: 5m
+        noDataState: OK
+        execErrState: Error
+        annotations:
+          summary: Authorization denials detected
+          description: One or more authorization.denied events occurred in the last ten minutes.
+        labels:
+          severity: warning
+          security_event_type: authorization.denied
+        data:
+          - refId: A
+            relativeTimeRange: { from: 600, to: 0 }
+            datasourceUid: jarvis-loki
+            model:
+              expr: 'sum(count_over_time({job="jarvis-security", security_event_type="authorization.denied"}[10m]))'
+              queryType: range
+              refId: A
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              type: threshold
+              expression: A
+              conditions:
+                - type: query
+                  query: { params: [A] }
+                  reducer: { type: sum, params: [] }
+                  evaluator: { type: gt, params: [0] }
+                  operator: { type: and }
+              refId: C
+
+      - uid: jarvis-catalog-mismatch
+        title: Jarvis catalog mismatch
+        condition: C
+        for: 1m
+        noDataState: OK
+        execErrState: Error
+        annotations:
+          summary: Catalog integrity mismatch detected
+          description: A catalog.mismatch event occurred in the last ten minutes.
+        labels:
+          severity: critical
+          security_event_type: catalog.mismatch
+        data:
+          - refId: A
+            relativeTimeRange: { from: 600, to: 0 }
+            datasourceUid: jarvis-loki
+            model:
+              expr: 'sum(count_over_time({job="jarvis-security", security_event_type="catalog.mismatch"}[10m]))'
+              queryType: range
+              refId: A
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              type: threshold
+              expression: A
+              conditions:
+                - type: query
+                  query: { params: [A] }
+                  reducer: { type: sum, params: [] }
+                  evaluator: { type: gt, params: [0] }
+                  operator: { type: and }
+              refId: C
+
+      - uid: jarvis-approval-consumed
+        title: Jarvis approval consumed
+        condition: C
+        for: 1m
+        noDataState: OK
+        execErrState: Error
+        annotations:
+          summary: An owner approval was consumed
+          description: Review approval.consumed events and the downstream proposal outcome.
+        labels:
+          severity: info
+          security_event_type: approval.consumed
+        data:
+          - refId: A
+            relativeTimeRange: { from: 600, to: 0 }
+            datasourceUid: jarvis-loki
+            model:
+              expr: 'sum(count_over_time({job="jarvis-security", security_event_type="approval.consumed"}[10m]))'
+              queryType: range
+              refId: A
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              type: threshold
+              expression: A
+              conditions:
+                - type: query
+                  query: { params: [A] }
+                  reducer: { type: sum, params: [] }
+                  evaluator: { type: gt, params: [0] }
+                  operator: { type: and }
+              refId: C
+
+      - uid: jarvis-workspace-path-denied
+        title: Jarvis workspace path denied
+        condition: C
+        for: 5m
+        noDataState: OK
+        execErrState: Error
+        annotations:
+          summary: Workspace path access was denied
+          description: One or more workspace_path.denied events occurred in the last ten minutes.
+        labels:
+          severity: warning
+          security_event_type: workspace_path.denied
+        data:
+          - refId: A
+            relativeTimeRange: { from: 600, to: 0 }
+            datasourceUid: jarvis-loki
+            model:
+              expr: 'sum(count_over_time({job="jarvis-security", security_event_type="workspace_path.denied"}[10m]))'
+              queryType: range
+              refId: A
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              type: threshold
+              expression: A
+              conditions:
+                - type: query
+                  query: { params: [A] }
+                  reducer: { type: sum, params: [] }
+                  evaluator: { type: gt, params: [0] }
+                  operator: { type: and }
+              refId: C
+
+      - uid: jarvis-plugin-failure
+        title: Jarvis plugin failure
+        condition: C
+        for: 1m
+        noDataState: OK
+        execErrState: Error
+        annotations:
+          summary: A plugin failed validation or loading
+          description: A plugin.failure event occurred in the last ten minutes.
+        labels:
+          severity: critical
+          security_event_type: plugin.failure
+        data:
+          - refId: A
+            relativeTimeRange: { from: 600, to: 0 }
+            datasourceUid: jarvis-loki
+            model:
+              expr: 'sum(count_over_time({job="jarvis-security", security_event_type="plugin.failure"}[10m]))'
+              queryType: range
+              refId: A
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              type: threshold
+              expression: A
+              conditions:
+                - type: query
+                  query: { params: [A] }
+                  reducer: { type: sum, params: [] }
+                  evaluator: { type: gt, params: [0] }
+                  operator: { type: and }
+              refId: C

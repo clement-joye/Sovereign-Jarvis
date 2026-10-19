@@ -1,0 +1,26 @@
+# Model configuration packaged with the shared Pi runner
+models.json
+
+# Reviewed executable extensions packaged from plugins
+extensions/extra-tools/index.ts
+extensions/extra-tools/glob.ts
+extensions/_shared/public-url.ts
+extensions/browser/index.ts
+extensions/browser/public-url.ts
+browser/bin
+
+# Catalog-selected agent instructions and skills, published separately
+brain/AGENTS.md
+brain/skills
+orchestrator/AGENTS.md
+orchestrator/skills
+router/AGENTS.md
+router/skills
+browser/AGENTS.md
+browser/skills
+document-analyzer/AGENTS.md
+document-analyzer/skills
+scheduler/AGENTS.md
+scheduler/skills
+echo/AGENTS.md
+echo/skills

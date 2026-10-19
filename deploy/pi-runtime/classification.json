@@ -1,0 +1,77 @@
+{
+  "$comment": "Reviewed runtime inputs and plugin resources. Keys must match accepted-resources.txt exactly.",
+  "resources": {
+    "models.json": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Reviewed local model definition used by the Pi SDK."
+    },
+    "extensions/extra-tools/index.ts": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Core plugin tool extension selected only by its agent manifest."
+    },
+    "extensions/extra-tools/glob.ts": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Bounded glob helper imported by the core plugin extension."
+    },
+    "extensions/_shared/public-url.ts": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Public URL validation imported by the core plugin extension."
+    },
+    "extensions/browser/index.ts": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Browser plugin extension selected only by its agent manifest."
+    },
+    "extensions/browser/public-url.ts": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Public URL validation imported by the Browser extension."
+    },
+    "browser/bin": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Browser plugin retrieval helper packaged only in its runtime image."
+    },
+    "brain/AGENTS.md": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Brain agent instructions."
+    },
+    "brain/skills": { "compatibility": "sdk-compatible", "rationale": "Brain agent skills." },
+    "orchestrator/AGENTS.md": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Orchestrator agent instructions."
+    },
+    "orchestrator/skills": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Orchestrator planning and delegation skills."
+    },
+    "router/AGENTS.md": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Router agent instructions."
+    },
+    "router/skills": { "compatibility": "sdk-compatible", "rationale": "Router agent skills." },
+    "browser/AGENTS.md": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Browser agent instructions."
+    },
+    "browser/skills": { "compatibility": "sdk-compatible", "rationale": "Browser agent skills." },
+    "document-analyzer/AGENTS.md": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Document Analyzer agent instructions."
+    },
+    "document-analyzer/skills": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Document Analyzer agent skills."
+    },
+    "scheduler/AGENTS.md": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Scheduler agent instructions."
+    },
+    "scheduler/skills": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Scheduler agent skills."
+    },
+    "echo/AGENTS.md": {
+      "compatibility": "sdk-compatible",
+      "rationale": "Optional Echo agent instructions."
+    },
+    "echo/skills": { "compatibility": "sdk-compatible", "rationale": "Optional Echo agent skills." }
+  }
+}

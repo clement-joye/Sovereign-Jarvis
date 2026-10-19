@@ -1,0 +1,31 @@
+# One-time Matrix bootstrap only. Use the same --project-name as the production
+# stack so the matrix-data named volume is reused by compose.production.yml.
+services:
+  matrix-homeserver:
+    image: forgejo.ellis.link/continuwuation/continuwuity@sha256:5cc03961412fb74836a14599cda3bfa17f003df902d9555281fa973976c5243b
+    command: /sbin/conduwuit
+    environment:
+      CONTINUWUITY_SERVER_NAME: ${MATRIX_SERVER_NAME:?Set MATRIX_SERVER_NAME in the protected environment file.}
+      CONTINUWUITY_WELL_KNOWN__CLIENT: https://${MATRIX_SERVER_NAME:?Set MATRIX_SERVER_NAME in the protected environment file.}
+      CONTINUWUITY_DATABASE_PATH: /var/lib/continuwuity
+      CONTINUWUITY_ADDRESS: 0.0.0.0
+      CONTINUWUITY_PORT: "8008"
+      CONTINUWUITY_ALLOW_FEDERATION: "false"
+      CONTINUWUITY_ALLOW_REGISTRATION: "true"
+      # Used only to register the separate brain service account after the
+      # owner has consumed Continuwuity's first-user bootstrap token.
+      CONTINUWUITY_REGISTRATION_TOKEN: ${CONTINUWUITY_REGISTRATION_TOKEN:?Set a temporary registration token for the brain account bootstrap.}
+    ports:
+      - "127.0.0.1:${MATRIX_HOST_PORT:-8008}:8008"
+    volumes:
+      - matrix-data:/var/lib/continuwuity
+    networks:
+      - matrix_net
+    restart: unless-stopped
+
+networks:
+  matrix_net:
+    driver: bridge
+
+volumes:
+  matrix-data:

@@ -1,0 +1,8 @@
+{
+  "name": "jarvis-core-extension-dependencies",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@sinclair/typebox": "0.34.49"
+  }
+}

@@ -1,0 +1,206 @@
+services:
+  brain-db:
+    image: postgres:16-alpine
+    environment:
+      # Match the user's local time so psql and PG-side date functions align
+      # with the Node-side application.
+      TZ: Europe/Stockholm
+      POSTGRES_DB: brain
+      POSTGRES_USER: brain
+      POSTGRES_PASSWORD: brain-test-password
+    volumes:
+      - brain-postgres-data:/var/lib/postgresql/data
+      - ../migrations:/docker-entrypoint-initdb.d:ro
+    networks:
+      - control_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U brain -d brain"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  brain-control:
+    build:
+      context: ../..
+      dockerfile: deploy/images/node.Dockerfile
+      args:
+        APP_NAME: brain-control
+    environment:
+      DATABASE_URL: postgres://brain:brain-test-password@brain-db:5432/brain
+      BRAIN_CONTROL_PORT: "3000"
+      PLATFORM_CATALOG_PATH: /var/lib/jarvis/platform-catalog/platform-catalog.v2.json
+      RUNTIME_PROVISIONER_URL: http://workspace-runtime-stub:3040
+      RUNTIME_PROVISIONER_TOKEN: system-test-runtime-token
+      RUN_AUTHORIZATION_SECRET: system-test-run-authorization-secret-0001
+      BRAIN_CONTROL_PLUGIN_ADMIN_TOKEN: system-test-plugin-admin-token
+      SECOND_BRAIN_ENVIRONMENT: system-test
+    ports:
+      - "127.0.0.1:${BRAIN_CONTROL_HOST_PORT:-3300}:3000"
+    depends_on:
+      brain-db:
+        condition: service_healthy
+      workspace-runtime-stub:
+        condition: service_healthy
+    networks:
+      - control_net
+    volumes:
+      - ${PLATFORM_CATALOG_DIR:?System test must generate a platform catalog directory}:/var/lib/jarvis/platform-catalog:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'node -e "fetch(''http://127.0.0.1:3000/health'').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"'
+        ]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  # This authenticated in-memory endpoint exercises the control-plane runtime
+  # lifecycle over HTTP. Runtime container/image isolation is tested separately
+  # against the real provisioner; the system suite uses this deterministic stub
+  # to make Matrix onboarding timing and state assertions reliable.
+  workspace-runtime-stub:
+    build:
+      context: ../..
+      dockerfile: deploy/images/node.Dockerfile
+      args:
+        APP_NAME: brain-control
+    command: ["node", "tests/system/compose/workspace-runtime-stub.mjs"]
+    environment:
+      RUNTIME_PROVISIONER_TOKEN: system-test-runtime-token
+    networks:
+      - control_net
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'node -e "fetch(''http://127.0.0.1:3040/health'').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"'
+        ]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  matrix-homeserver:
+    image: forgejo.ellis.link/continuwuation/continuwuity@sha256:5cc03961412fb74836a14599cda3bfa17f003df902d9555281fa973976c5243b
+    command: /sbin/conduwuit
+    environment:
+      # Match the user's local time so homeserver log timestamps and
+      # push-notification timestamps align with the application.
+      TZ: Europe/Stockholm
+      CONTINUWUITY_SERVER_NAME: matrix.test
+      CONTINUWUITY_DATABASE_PATH: /var/lib/continuwuity
+      CONTINUWUITY_ADDRESS: 0.0.0.0
+      CONTINUWUITY_PORT: "8008"
+      CONTINUWUITY_ALLOW_FEDERATION: "false"
+      CONTINUWUITY_ALLOW_REGISTRATION: "true"
+      CONTINUWUITY_REGISTRATION_TOKEN: jarvis-system-test-registration-token
+    ports:
+      - "127.0.0.1:${MATRIX_HOMESERVER_HOST_PORT:-3380}:8008"
+    volumes:
+      - matrix-homeserver-data:/var/lib/continuwuity
+    networks:
+      - matrix_net
+
+  matrix-gateway:
+    build:
+      context: ../..
+      dockerfile: deploy/images/node.Dockerfile
+      args:
+        APP_NAME: matrix-gateway
+    environment:
+      BRAIN_CONTROL_URL: http://brain-control:3000
+      MATRIX_GATEWAY_PORT: "3020"
+      PLATFORM_CATALOG_PATH: /var/lib/jarvis/platform-catalog/platform-catalog.v2.json
+      MATRIX_OUTBOUND_POLL_MS: "250"
+      MATRIX_HOMESERVER_URL: http://matrix-homeserver:8008
+      MATRIX_ACCESS_TOKEN: ${MATRIX_ACCESS_TOKEN:-}
+      MATRIX_OWNER_ID: ${MATRIX_OWNER_ID:-@owner:example}
+      MATRIX_BRAIN_USER_ID: ${MATRIX_BRAIN_USER_ID:-@brain:example}
+      MATRIX_E2EE_ENABLED: ${MATRIX_E2EE_ENABLED:-false}
+      MATRIX_SYNC_POLL_MS: "200"
+      SECOND_BRAIN_ENVIRONMENT: system-test
+    ports:
+      - "127.0.0.1:${MATRIX_GATEWAY_HOST_PORT:-3320}:3020"
+    volumes:
+      - ${PLATFORM_CATALOG_DIR:?System test must generate a platform catalog directory}:/var/lib/jarvis/platform-catalog:ro
+      - matrix-exchange:/brain/exchange:rw
+      - matrix-crypto:/brain/matrix-crypto:rw
+    depends_on:
+      brain-control:
+        condition: service_healthy
+    networks:
+      - control_net
+      - matrix_net
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'node -e "fetch(''http://127.0.0.1:3020/health'').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"'
+        ]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  media-worker:
+    profiles: ["stt"]
+    build:
+      context: ../..
+      dockerfile: deploy/images/media-worker.Dockerfile
+      args:
+        WHISPER_CPP_REVISION: ${WHISPER_CPP_REVISION:-23ee03506a91ac3d3f0071b40e66a430eebdfa1d}
+    environment:
+      MEDIA_WORKER_PORT: "3030"
+      SECOND_BRAIN_ENVIRONMENT: production
+      MEDIA_STT_PROVIDER: whisper-cpp
+      MEDIA_EXCHANGE_ROOT: /brain/exchange
+      MEDIA_CACHE_ROOT: /brain/media-cache
+      WHISPER_CPP_BINARY: /usr/local/bin/whisper-cli
+      WHISPER_CPP_MODEL_PATH: /opt/whisper-models/ggml-small.bin
+      WHISPER_CPP_RUNTIME_VERSION: v1.8.6
+      WHISPER_CPP_MODEL_ID: ggml-small
+      WHISPER_CPP_MODEL_SHA256: 1be3a9b2063867b937e64e2ec7483364a79917e157fa98c5d94b5c1fffea987b
+      WHISPER_CPP_LANGUAGE: auto
+      MEDIA_STT_MAX_CONCURRENCY: "1"
+    ports:
+      - "127.0.0.1:${MEDIA_WORKER_HOST_PORT:-3330}:3030"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=128m,mode=0700
+    volumes:
+      - matrix-exchange:/brain/exchange:rw
+      - media-cache:/brain/media-cache:rw
+      - type: bind
+        source: ${WHISPER_MODEL_HOST_DIR:-/dev/null}
+        target: /opt/whisper-models
+        read_only: true
+    pids_limit: 128
+    cpus: "2.0"
+    mem_limit: 2g
+    networks:
+      - control_net
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'node -e "fetch(''http://127.0.0.1:3030/health'').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"'
+        ]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+networks:
+  control_net:
+    driver: bridge
+  matrix_net:
+    driver: bridge
+
+volumes:
+  brain-postgres-data:
+  matrix-homeserver-data:
+  matrix-exchange:
+  matrix-crypto:
+  media-cache:

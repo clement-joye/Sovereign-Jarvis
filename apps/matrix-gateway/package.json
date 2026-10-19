@@ -1,0 +1,27 @@
+{
+  "name": "@second-brain/matrix-gateway",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "Clément Joye",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b",
+    "start": "node dist/src/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@matrix-org/matrix-sdk-crypto-nodejs": "0.6.1",
+    "@second-brain/configuration": "workspace:*",
+    "@second-brain/contracts": "workspace:*",
+    "@second-brain/matrix-adapter": "workspace:*",
+    "@second-brain/media-adapter": "workspace:*",
+    "@second-brain/observability": "workspace:*",
+    "@second-brain/platform-catalog": "workspace:*",
+    "@vector-im/matrix-bot-sdk": "0.9.0-element.1"
+  },
+  "devDependencies": {
+    "tsx": "catalog:"
+  }
+}

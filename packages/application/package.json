@@ -1,0 +1,36 @@
+{
+  "name": "@second-brain/application",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "Clément Joye",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./ports": {
+      "types": "./dist/src/ports.d.ts",
+      "import": "./dist/src/ports.js"
+    },
+    "./ports/*": {
+      "types": "./dist/src/ports/*.d.ts",
+      "import": "./dist/src/ports/*.js"
+    },
+    "./system-message": {
+      "types": "./dist/src/system-message.d.ts",
+      "import": "./dist/src/system-message.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@second-brain/contracts": "workspace:*",
+    "@second-brain/domain": "workspace:*",
+    "@second-brain/observability": "workspace:*",
+    "@second-brain/schedule-engine": "workspace:*"
+  }
+}

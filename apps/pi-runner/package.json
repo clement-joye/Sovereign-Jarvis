@@ -1,0 +1,25 @@
+{
+  "name": "@second-brain/pi-runner",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "Clément Joye",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b",
+    "start": "node dist/src/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@second-brain/installed-plugins": "workspace:*",
+    "@second-brain/configuration": "workspace:*",
+    "@second-brain/contracts": "workspace:*",
+    "@second-brain/observability": "workspace:*",
+    "@second-brain/platform-catalog": "workspace:*",
+    "@second-brain/pi-adapter": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "catalog:"
+  }
+}
