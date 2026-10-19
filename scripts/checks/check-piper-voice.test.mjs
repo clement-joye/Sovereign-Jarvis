@@ -13,8 +13,8 @@ test("Piper voice defaults use the pinned, checksum-verified LJ Speech voice", a
     await Promise.all([
       readFile(new URL("deploy/scripts/models/download-piper-model.sh", root), "utf8"),
       readFile(new URL("deploy/compose/compose.base.yml", root), "utf8"),
-      readFile(new URL("deploy/compose/compose.dev.yml", root), "utf8"),
-      readFile(new URL("deploy/compose/compose.production.yml", root), "utf8"),
+      readFile(new URL("deploy/compose/compose.dev.overlay.yml", root), "utf8"),
+      readFile(new URL("deploy/compose/compose.production.overlay.yml", root), "utf8"),
       readFile(new URL("deploy/compose/production.env.example", root), "utf8")
     ]);
 

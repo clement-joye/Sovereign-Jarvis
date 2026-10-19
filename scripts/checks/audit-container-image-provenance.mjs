@@ -95,6 +95,7 @@ console.log(
       generatedFrom: [
         "deploy/compose/compose.base.yml",
         "deploy/compose/compose.production.yml",
+        "deploy/compose/compose.production.overlay.yml",
         ...(observabilitySelections.length > 0 ? ["deploy/compose/compose.observability.yml"] : [])
       ],
       images: makeRecords(images)
