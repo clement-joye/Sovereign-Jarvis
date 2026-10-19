@@ -12,7 +12,7 @@ For a step-by-step sequence to close the open gates, use the
 
 | Phase | State | Evidence or next gate |
 | --- | --- | --- |
-| 0. Freeze boundary and baseline | In progress | Inventories, local verification, tested-host version statement, and current-source/history review are recorded; the new-repository scan remains open |
+| 0. Freeze boundary and baseline | Complete | Inventories, local verification, tested-host version statement, and final new-repository source/history scans are recorded |
 | 1. Licensing and provenance | Complete for source-only release | Locked dependency licenses, deployed artifact identities, source/license references, and unavailable upstream build evidence are recorded in `THIRD_PARTY_NOTICES.md` and `container-image-provenance.md`; publishing Jarvis runtime images would require the separate evidence closure described there |
 | 2. Public database baseline | Complete | Empty-DB baseline, public ledger semantics, PostgreSQL integration, and first-workspace/first-message Compose acceptance pass |
 | 3. Legacy and dead paths | Complete | Legacy paths and the obsolete vendoring helper are removed; tested systemd and launchd startup integration is retained |
@@ -22,7 +22,7 @@ For a step-by-step sequence to close the open gates, use the
 | 7. Routine operator interface | Complete for first release | Start/stop/status/logs/update/backup/restore wrappers and focused tests are implemented; backup and restore are operator-confirmed on macOS and Arch; live update and boot rehearsals are explicitly post-release work |
 | 8. Matrix activity notices | Complete | Threaded delivery, cancellation, and interrupted Orchestrator plan recovery are operator-confirmed in real clients/workspaces |
 | 9. Documentation | Complete for first release | Guided installation and daily operations are documented; release-scope claims and operator command examples were reviewed against scripts, three discrepancies were corrected, and `pnpm verify` passed |
-| 10. Release hardening | In progress | macOS and Arch installation, backup/restore, and live scenarios are operator-confirmed; the final source snapshot and new-repository scan remain open |
+| 10. Release hardening | Complete for source-only release | macOS and Arch installation, backup/restore, and live scenarios are operator-confirmed; the final source snapshot is clean and CI passes. Live update, reboot/login, and Ubuntu 24.04 validation remain post-release work |
 
 Baseline checkout: `61257fa7d2bc96086690a1700c24dbda7c8d1f03`
 (2026-09-26).
@@ -657,8 +657,11 @@ agent label and the persisted origin thread; the ledger stores no message text.
   containing only the reviewed final source snapshot, without the old `.git`
   history. No rewrite of the existing repository is needed. The earlier
   six-path heuristic cannot be reproduced.
-- [ ] Scan the actual new repository snapshot and its new history before
-  publication; this decision alone does not prove the copied files are clean.
+- [x] Scan the actual new repository snapshot and its complete history before
+  publication (2026-10-19): pinned Gitleaks v8.30.0 image
+  `sha256:691af3c7c5a48b16f187ce3446d5f194838f91238f27270ed36eef6359a574d9`
+  reported no leaks in the source tree (~15.0 MB) or the four reachable
+  commits (~4.32 MB).
 - [x] Operator-confirmed fresh install and checks on the current macOS 26.4
   arm64 host (2026-10-14). Backup and restore were subsequently reported on
   macOS; update, boot service behavior, and checks added after the install
