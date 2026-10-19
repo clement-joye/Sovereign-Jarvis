@@ -24,6 +24,8 @@ jobs:
           cache: pnpm
       - name: Install dependencies with frozen cross-platform lockfile
         run: pnpm install --frozen-lockfile
+      - name: Build workspace packages
+        run: pnpm build
       - name: Load Matrix native crypto dependency
         run: >-
           pnpm --filter @second-brain/matrix-gateway exec node -e
